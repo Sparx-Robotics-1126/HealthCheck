@@ -1,0 +1,60 @@
+plugins {
+    id "java-library"
+    id "maven-publish"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+group = "org.gosparx1126.lib"
+version = "1.0.0"
+
+publishing {
+    publications {
+        healthCheckLibrary(MavenPublication) {
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name = "sparx-release" //  optional target repository name
+            url = "https://pkg.softwarily.io/repository/sparx-release/"
+            credentials {
+                username = sparxMavenUser
+                password = sparxMavenPassword
+            }
+        }
+    }
+
+}
+
+repositories {
+        maven {
+            name = "sparx" //  optional target repository name
+            url = "https://pkg.softwarily.io/repository/sparx/"
+            credentials {
+                username = sparxMavenUser
+                password = sparxMavenPassword
+            }
+        }
+}
+
+dependencies {
+    implementation 'edu.wpi.first.wpilibj:wpilibj-java:2025.2.1'
+    implementation 'edu.wpi.first.wpiutil:wpiutil-java:2025.2.1'
+    implementation 'edu.wpi.first.ntcore:ntcore-java:2025.2.1'
+    implementation 'edu.wpi.first.cscore:cscore-java:2025.2.1'
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'junit.jupiter.extensions.autodetection.enabled', 'true'
+}
+
+// Configure string concat to always inline compile
+tasks.withType(JavaCompile) {
+    options.compilerArgs.add '-XDstringConcat=inline'
+}
